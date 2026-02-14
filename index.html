@@ -108,7 +108,6 @@
 
             <div class="media-main-box">
                 <video id="myVideo" src="https://files.catbox.moe/y1ex8v.mp4" controls></video>
-                
                 <img src="https://files.catbox.moe/zn29so.jpg">
                 <img src="https://files.catbox.moe/tt8yj6.jpg">
             </div>
@@ -147,11 +146,16 @@
 
         function checkPass() {
             if(document.getElementById('passInput').value === "26/12/2025") {
+                const music = document.getElementById('mainMusic');
+                
+                // تشغيل الموسيقى فور الضغط لحل مشكلة المتصفح
+                music.play().catch(e => console.log("Play error handle"));
+
                 document.getElementById('lock-screen').style.transform = 'translateY(-100%)';
                 setTimeout(() => {
                     document.getElementById('lock-screen').style.display = 'none';
                     document.getElementById('main-content').style.display = 'block';
-                    document.getElementById('mainMusic').play();
+                    music.play();
                     setupObserver();
                 }, 1000);
             } else { alert("الباسورد غلط يا أحمد ❤️"); }
@@ -176,6 +180,7 @@
                 if (i < message.length) {
                     target.innerHTML += message.charAt(i) === '\n' ? '<br>' : message.charAt(i);
                     i++;
+                    // سرعة الكتابة (تم ضبطها لتكون أبطأ وأوضح)
                     setTimeout(type, 90);
                 } else {
                     document.getElementById('cursor-elem').style.display = 'none';
