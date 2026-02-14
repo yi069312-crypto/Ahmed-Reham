@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>من Rahma إلى Ahmed ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@1,700&family=Aref+Ruqaa:wght@700&family=Cairo:wght@600;900&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --deep-red: #8b0000; 
+            --royal-camel: #b8860b; 
+            --cream: #fffaf0; 
+        }
+
+        body { 
+            background: var(--cream); 
+            color: #333; 
+            font-family: 'Cairo', sans-serif; 
+            margin: 0; padding: 0; overflow-x: hidden; text-align: center; 
+        }
+
+        /* قلوب ونجوم */
+        .falling { position: fixed; top: -50px; pointer-events: none; z-index: 999; animation: fall linear forwards; }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
+
+        /* شاشة القفل */
+        #lock-screen { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: linear-gradient(45deg, var(--deep-red), var(--royal-camel)); 
+            display: flex; justify-content: center; align-items: center; z-index: 10000; transition: 1s ease-in-out; 
+        }
+        .lock-card { 
+            background: white; padding: 40px 20px; border-radius: 30px; 
+            border: 4px solid var(--royal-camel); width: 85%; max-width: 350px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        input[type="password"] { 
+            border: 2px solid #ddd; padding: 15px; border-radius: 10px; 
+            text-align: center; font-size: 1.5rem; margin-bottom: 20px; 
+            width: 80%; outline: none; letter-spacing: 5px;
+        }
+        .enter-btn { background: var(--deep-red); color: white; border: none; padding: 12px 40px; border-radius: 50px; font-weight: 900; cursor: pointer; }
+
+        .container { width: 100%; padding-bottom: 50px; }
+        .header-title { color: var(--deep-red); font-family: 'Aref Ruqaa', serif; font-size: 2.5rem; margin: 80px 0 40px; }
+
+        /* الصندوق الخاص بالميديا (فيديو وصور) */
+        .media-main-box {
+            background: white;
+            width: 92%;
+            margin: 0 auto 40px;
+            padding: 15px;
+            border: 5px solid var(--royal-camel);
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+
+        .media-main-box video {
+            width: 100%;
+            border-radius: 15px;
+            display: block;
+            margin-bottom: 15px;
+            background: #000;
+        }
+
+        .media-main-box img {
+            width: 100%;
+            border-radius: 15px;
+            display: block;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .media-main-box img:last-child { margin-bottom: 0; }
+
+        /* صندوق المسدج */
+        .typewriter-box { 
+            background: white; padding: 35px 20px; margin: 30px 15px 50px;
+            border-radius: 20px; border-right: 8px solid var(--deep-red);
+            text-align: right; line-height: 2.2; font-size: 1.3rem; 
+            font-family: 'Amiri', serif; color: #333; box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            min-height: 200px;
+        }
+        .cursor { font-weight: bold; color: var(--deep-red); animation: blink 0.7s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .decoration-top { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: url('https://www.transparentpng.com/download/ramadan-lantern/ornament-ramadan-kareem-lantern-png-7.png') repeat-x; background-size: contain; z-index: 1001; }
+    </style>
+</head>
+<body onload="initParticles()">
+
+    <div class="decoration-top"></div>
+
+    <div id="lock-screen">
+        <div class="lock-card">
+            <h2>Ahmed ❤️ Rahma</h2>
+            <input type="password" id="passInput" placeholder="••••••••">
+            <br>
+            <button class="enter-btn" onclick="checkPass()">افتح قلبي ❤️</button>
+        </div>
+    </div>
+
+    <audio id="mainMusic" src="https://files.catbox.moe/kkit0e.mp3" loop></audio>
+
+    <div id="main-content" style="display:none;">
+        <div class="container">
+            <h1 class="header-title">أنت كُل دنيتي ❤️</h1>
+
+            <div class="media-main-box">
+                <video id="myVideo" src="https://files.catbox.moe/y1ex8v.mp4" controls></video>
+                
+                <img src="https://files.catbox.moe/zn29so.jpg">
+                <img src="https://files.catbox.moe/tt8yj6.jpg">
+            </div>
+
+            <div class="typewriter-box" id="trigger-point">
+                <span id="textTarget"></span><span class="cursor" id="cursor-elem">|</span>
+            </div>
+            
+            <p style="color: var(--royal-camel); font-weight: 900; padding-bottom: 50px;">
+                Rahma & Ahmed | 2025 ✨
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const message = `حبيت أقدملك هدية مختلفة… تتحس بالقلب... 
+حاجة كرييتڤ كده تشبهك، لأنك بالنسبالي مش عادي… إنت مميز بطريقة تخليك تستاهل يتعملك حاجة مخصوص علشانك.
+يمكن الكلمات بسيطة، بس إحساسي ليك كبير…
+إلي القلب الوحيد الذي جعلني مُطمأنه
+أنا لك…
+حين يثقل العالم على كتفيك،
+حين تخذلك الأيام،
+وحين تحتاج حضنًا لا يسأل كثيرًا…
+ستجدني دائمًا هنا. ✨💙
+هنا لأشاركك التعب قبل الفرح،
+ولأخفف عنك ما لا يُقال،
+ولأذكّرك أنك لست وحدك… حتى في أكثر لحظاتك صمتًا.
+أنا لك سندًا إذا مِلت،
+وطمأنينةً إذا اضطرب قلبك،
+ويدًا لا تترك يدك مهما تبدلت الظروف.
+فحين يقسو العالم عليك…
+تعال إليّ،
+فقلبي وطنك الآمن. 💙`;
+
+        let isStarted = false;
+
+        function checkPass() {
+            if(document.getElementById('passInput').value === "26/12/2025") {
+                document.getElementById('lock-screen').style.transform = 'translateY(-100%)';
+                setTimeout(() => {
+                    document.getElementById('lock-screen').style.display = 'none';
+                    document.getElementById('main-content').style.display = 'block';
+                    document.getElementById('mainMusic').play();
+                    setupObserver();
+                }, 1000);
+            } else { alert("الباسورد غلط يا أحمد ❤️"); }
+        }
+
+        function setupObserver() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !isStarted) {
+                        isStarted = true;
+                        startTypewriter();
+                    }
+                });
+            }, { threshold: 0.2 });
+            observer.observe(document.getElementById('trigger-point'));
+        }
+
+        function startTypewriter() {
+            let i = 0;
+            const target = document.getElementById('textTarget');
+            function type() {
+                if (i < message.length) {
+                    target.innerHTML += message.charAt(i) === '\n' ? '<br>' : message.charAt(i);
+                    i++;
+                    setTimeout(type, 50);
+                } else {
+                    document.getElementById('cursor-elem').style.display = 'none';
+                }
+            }
+            type();
+        }
+
+        const video = document.getElementById('myVideo');
+        const music = document.getElementById('mainMusic');
+        video.onplay = () => music.pause();
+        video.onpause = () => music.play();
+
+        function initParticles() {
+            setInterval(() => {
+                const el = document.createElement('div');
+                el.className = 'falling';
+                el.innerHTML = Math.random() > 0.5 ? '❤️' : '✨';
+                el.style.left = Math.random() * 100 + 'vw';
+                el.style.fontSize = Math.random() * 20 + 10 + 'px';
+                el.style.animationDuration = Math.random() * 3 + 3 + 's';
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 5000);
+            }, 300);
+        }
+    </script>
+</body>
+</html>
